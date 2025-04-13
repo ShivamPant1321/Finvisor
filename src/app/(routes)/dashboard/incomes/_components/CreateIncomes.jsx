@@ -14,22 +14,19 @@ import EmojiPicker from "emoji-picker-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { db } from "../../../../../../utils/dbConfig";
-import { Budgets } from "../../../../../../utils/schema";
+import { Incomes } from "../../../../../../utils/schema";
 import { useUser } from "@clerk/nextjs";
 import { toast } from "sonner";
 
-function CreateBudget({ refreshData }) {
+function CreateIncomes({ refreshData }) {
   const [emojiIcon, setEmojiIcon] = useState("😀");
   const [openEmojiPicker, setOpenEmojiPicker] = useState(false);
-  const [name, setName] = useState(""); // Ensure empty string initialization
-  const [amount, setAmount] = useState(""); // Ensure empty string initialization
+  const [name, setName] = useState("");
+  const [amount, setAmount] = useState("");
 
   const { user } = useUser();
 
-  /**
-   * Used to Create New Budget
-   */
-  const onCreateBudget = async () => {
+  const onCreateIncomes = async () => {
     const parsedAmount = parseFloat(amount);
     if (isNaN(parsedAmount)) {
       toast.error("Please enter a valid amount.");
@@ -37,18 +34,18 @@ function CreateBudget({ refreshData }) {
     }
 
     const result = await db
-      .insert(Budgets)
+      .insert(Incomes)
       .values({
         name: name,
-        amount: parsedAmount, // Convert amount to number
+        amount: parsedAmount,
         createdBy: user?.primaryEmailAddress?.emailAddress,
         icon: emojiIcon,
       })
-      .returning({ insertedId: Budgets.id });
+      .returning({ insertedId: Incomes.id });
 
     if (result) {
-      await refreshData(); // Ensure refresh completes
-      toast("New Budget Created!");
+      await refreshData();
+      toast("New Income Source Created!");
     }
   };
 
@@ -61,19 +58,19 @@ function CreateBudget({ refreshData }) {
             border-2 border-dashed cursor-pointer hover:shadow-md"
           >
             <h2 className="text-3xl">+</h2>
-            <h2>Create New Budget</h2>
+            <h2>Create New Income Source</h2>
           </div>
         </DialogTrigger>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Create New Budget</DialogTitle>
-            {/* Keep plain text inside DialogDescription */}
+            <DialogTitle>Create New Income Source</DialogTitle>
+            {/* Keep only plain text inside DialogDescription */}
             <DialogDescription>
-              Enter details to create a new budget.
+              Enter details to add a new income source.
             </DialogDescription>
           </DialogHeader>
 
-          {/* Move input fields outside DialogDescription */}
+          {/* Move this outside DialogDescription */}
           <div className="mt-5">
             <Button
               variant="outline"
@@ -93,14 +90,14 @@ function CreateBudget({ refreshData }) {
               </div>
             )}
             <div className="mt-2">
-              <h2 className="text-black font-medium my-1">Budget Name</h2>
+              <h2 className="text-black font-medium my-1">Source Name</h2>
               <Input
-                placeholder="e.g. Home Decor"
+                placeholder="e.g. Youtube"
                 onChange={(e) => setName(e.target.value)}
               />
             </div>
             <div className="mt-2">
-              <h2 className="text-black font-medium my-1">Budget Amount</h2>
+              <h2 className="text-black font-medium my-1">Monthly Amount</h2>
               <Input
                 type="number"
                 placeholder="e.g. 5000$"
@@ -113,10 +110,10 @@ function CreateBudget({ refreshData }) {
             <DialogClose asChild>
               <Button
                 disabled={!(name && amount)}
-                onClick={onCreateBudget} // No need for function wrapper
+                onClick={onCreateIncomes}
                 className="mt-5 w-full rounded-full"
               >
-                Create Budget
+                Create Income Source
               </Button>
             </DialogClose>
           </DialogFooter>
@@ -126,4 +123,4 @@ function CreateBudget({ refreshData }) {
   );
 }
 
-export default CreateBudget;
+export default CreateIncomes;

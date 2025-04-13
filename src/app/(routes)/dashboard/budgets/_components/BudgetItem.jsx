@@ -1,59 +1,59 @@
-"use client"
-import React, { useEffect, useState } from 'react'
-import CreateBudget from './CreateBudget'
-import { db } from '@/utils/dbConfig'
-import { desc, eq, getTableColumns, sql } from 'drizzle-orm'
-import { Budgets, Expenses } from '@/utils/schema'
-import { useUser } from '@clerk/nextjs'
-import BudgetItem from './BudgetItem'
+import Link from "next/link";
+import React from "react";
 
-function BudgetList() {
-
-  const [budgetList,setBudgetList]=useState([]);
-  const {user}=useUser();
-  useEffect(()=>{
-    user&&getBudgetList();
-  },[user])
-  /**
-   * used to get budget List
-   */
-  const getBudgetList=async()=>{
-
-    const result=await db.select({
-      ...getTableColumns(Budgets),
-      totalSpend:sql `sum(${Expenses.amount})`.mapWith(Number),
-      totalItem: sql `count(${Expenses.id})`.mapWith(Number)
-    }).from(Budgets)
-    .leftJoin(Expenses,eq(Budgets.id,Expenses.budgetId))
-    .where(eq(Budgets.createdBy,user?.primaryEmailAddress?.emailAddress))
-    .groupBy(Budgets.id)
-    .orderBy(desc(Budgets.id))
-    ;
-
-    setBudgetList(result);
-
-  }
-
+function BudgetItem({ budget }) {
+  const calculateProgressPerc = () => {
+    const perc = (budget.totalSpend / budget.amount) * 100;
+    return perc > 100 ? 100 : perc.toFixed(2);
+  };
   return (
-    <div className='mt-7'>
-        <div className='grid grid-cols-1
-        md:grid-cols-2 lg:grid-cols-3 gap-5'>
-        <CreateBudget
-        refreshData={()=>getBudgetList()}/>
-        {budgetList?.length>0? budgetList.map((budget,index)=>(
-          <BudgetItem budget={budget} key={index} />
-        ))
-      :[1,2,3,4,5].map((item,index)=>(
-        <div key={index} className='w-full bg-slate-200 rounded-lg
-        h-[150px] animate-pulse'>
+    <Link href={"/dashboard/expenses/" + budget?.id}>
+      <div
+        className="p-5 border rounded-2xl
+    hover:shadow-md cursor-pointer h-[170px]"
+      >
+        <div className="flex gap-2 items-center justify-between">
+          <div className="flex gap-2 items-center">
+            <h2
+              className="text-2xl p-3 px-4
+              bg-slate-100 rounded-full 
+              "
+            >
+              {budget?.icon}
+            </h2>
+            <div>
+              <h2 className="font-bold">{budget.name}</h2>
+              <h2 className="text-sm text-gray-500">{budget.totalItem} Item</h2>
+            </div>
+          </div>
+          <h2 className="font-bold text-primary text-lg"> ${budget.amount}</h2>
+        </div>
 
+        <div className="mt-5">
+          <div className="flex items-center justify-between mb-3">
+            <h2 className="text-xs text-slate-400">
+              ${budget.totalSpend ? budget.totalSpend : 0} Spend
+            </h2>
+            <h2 className="text-xs text-slate-400">
+              ${budget.amount - budget.totalSpend} Remaining
+            </h2>
+          </div>
+          <div
+            className="w-full
+              bg-slate-300 h-2 rounded-full"
+          >
+            <div
+              className="
+              bg-primary h-2 rounded-full"
+              style={{
+                width: `${calculateProgressPerc()}%`,
+              }}
+            ></div>
+          </div>
         </div>
-      ))
-      }
-        </div>
-       
-    </div>
-  )
+      </div>
+    </Link>
+  );
 }
 
-export default BudgetList
+export default BudgetItem;

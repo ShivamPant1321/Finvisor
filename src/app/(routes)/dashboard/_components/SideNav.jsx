@@ -56,7 +56,9 @@ const SideNav = () => {
   return (
     <div className="h-screen p-5 border shadow-sm">
       <div className="flex flex-row items-center">
+        <Link href={'/'}>
         <Image src={"/FinVisor.png"} alt="logo" width={140} height={45} />
+        </Link>
       </div>
 
       <div className="mt-5">
