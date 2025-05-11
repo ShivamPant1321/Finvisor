@@ -8,6 +8,9 @@ const nextConfig = {
       weak: true,
     },
   },
+  images: {
+    domains: ['randomuser.me', 'images.unsplash.com'],
+  },
 };
 
 export default nextConfig;

@@ -4,10 +4,10 @@ import animate from "tailwindcss-animate";
 export default {
   darkMode: ["class"],
   content: [
-    './src/pages/**/*.{js,jsx,ts,tsx}',
-    './src/components/**/*.{js,jsx,ts,tsx}',
-    './src/app/**/*.{js,jsx,ts,tsx}',
-    './src/**/*.{js,jsx,ts,tsx}',
+    './pages/**/*.{js,jsx}',
+    './components/**/*.{js,jsx}',
+    './app/**/*.{js,jsx}',
+    './src/**/*.{js,jsx}',
   ],
   theme: {
     container: {
@@ -52,6 +52,20 @@ export default {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
+        mono: {
+          100: "hsl(var(--mono-100))",
+          200: "hsl(var(--mono-200))",
+          300: "hsl(var(--mono-300))",
+          400: "hsl(var(--mono-400))",
+          500: "hsl(var(--mono-500))",
+          600: "hsl(var(--mono-600))",
+          700: "hsl(var(--mono-700))",
+          800: "hsl(var(--mono-800))",
+          900: "hsl(var(--mono-900))",
+        },
+      },
+      fontFamily: {
+        sans: ['Inter', 'sans-serif'],
       },
       borderRadius: {
         lg: "var(--radius)",
@@ -67,10 +81,19 @@ export default {
           from: { height: "var(--radix-accordion-content-height)" },
           to: { height: "0" },
         },
+        "float": {
+          '0%, 100%': { transform: 'translateY(0)' },
+          '50%': { transform: 'translateY(-10px)' },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+        "float": "float 5s ease-in-out infinite",
+      },
+      boxShadow: {
+        'soft': '0 10px 30px -15px rgba(0, 0, 0, 0.1)',
+        'elevation': '0 4px 20px -2px rgba(0, 0, 0, 0.08)',
       },
     },
   },
