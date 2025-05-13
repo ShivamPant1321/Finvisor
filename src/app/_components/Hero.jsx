@@ -8,9 +8,20 @@ import Image from "next/image";
 import { SparklesCore } from "@/components/ui/sparkles";
 import { TextGenerateEffect } from "@/components/ui/text-generate-effect";
 import { BackgroundBeams } from "@/components/ui/background-beams";
+import { useTheme } from "next-themes";
 
 const Hero = () => {
   const [imageError, setImageError] = useState(false);
+  const { theme, systemTheme } = useTheme();
+  
+  // Determine the current theme
+  const currentTheme = theme === 'system' ? systemTheme : theme;
+  const isDark = currentTheme === 'dark';
+  
+  // Choose dashboard image based on current theme
+  const dashboardImage = isDark 
+    ? "/dashboard-preview-dark.png" 
+    : "/dashboard-preview-light.png";
 
   return (
     <section className="container mx-auto px-6 py-24 md:py-32 relative overflow-hidden">
@@ -24,7 +35,8 @@ const Hero = () => {
           maxSize={1.4}
           particleDensity={100}
           className="w-full h-full"
-          particleColor="#8B5CF6"
+          particleColor={isDark ? "180, 180, 255" : "#8B5CF6"}
+          particleOpacity={isDark ? 0.8 : 1}
         />
       </div>
       
@@ -104,10 +116,10 @@ const Hero = () => {
           ) : (
             <div className="relative">
               <Image 
-                src="/dashboard-preview.png" 
+                src={dashboardImage} 
                 alt="FinVisor Dashboard Preview"
-                width={600}
-                height={400}
+                width={500}
+                height={300}
                 className="rounded-xl shadow-xl relative z-10 border border-white/20 dark:border-gray-800/50 backdrop-blur-sm"
                 priority
                 onError={() => setImageError(true)}

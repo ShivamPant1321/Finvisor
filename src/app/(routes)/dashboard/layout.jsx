@@ -8,10 +8,13 @@ import { Budgets } from "../../../../utils/schema";
 import { useUser } from "@clerk/nextjs";
 import { eq } from "drizzle-orm";
 import { useRouter } from "next/navigation";
+import { useMountedTheme } from "@/hooks/use-mounted-theme";
+import { motion } from "framer-motion";
 
 const DashboardLayout = ({ children }) => {
   const { user, isLoaded } = useUser();
   const router = useRouter();
+  const { isDark, dashboardDarkColors } = useMountedTheme();
 
   useEffect(() => {
     if (isLoaded && user) {
@@ -37,13 +40,22 @@ const DashboardLayout = ({ children }) => {
   };
 
   return (
-    <div className="flex">
-      <div className="fixed md:w-64 hidden md:block">
+    <div className={`flex h-screen ${isDark ? dashboardDarkColors.background : "bg-slate-50"}`}>
+      <div className="fixed md:w-64 hidden md:block h-screen z-30">
         <SideNav />
       </div>
-      <div className="md:ml-64 w-full">
+      <div className="md:ml-64 w-full flex flex-col">
         <DashboardHeader />
-        <div className="p-4">{children}</div>
+        <motion.div 
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.5 }}
+          className={`flex-1 overflow-auto scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-700 ${
+            isDark ? "bg-gradient-to-br from-gray-900 to-gray-950" : "bg-gradient-to-br from-slate-50 to-white"
+          }`}
+        >
+          <div className="max-w-7xl mx-auto p-4 sm:p-6">{children}</div>
+        </motion.div>
       </div>
     </div>
   );

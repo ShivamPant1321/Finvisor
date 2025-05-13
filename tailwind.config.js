@@ -94,6 +94,10 @@ export default {
       boxShadow: {
         'soft': '0 10px 30px -15px rgba(0, 0, 0, 0.1)',
         'elevation': '0 4px 20px -2px rgba(0, 0, 0, 0.08)',
+        'sparkle': '0 0 10px var(--sparkle-color)',
+      },
+      backgroundColor: {
+        'sparkle': 'var(--sparkle-highlight)',
       },
     },
   },

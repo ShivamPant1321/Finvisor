@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import { Plus, Minus } from "lucide-react";
-import { useTheme } from "next-themes";
+import { useMountedTheme } from "@/hooks/use-mounted-theme";
 
 const faqs = [
   {
@@ -29,7 +29,7 @@ const faqs = [
 
 const FAQ = () => {
   const [openIndex, setOpenIndex] = useState(-1);
-  const { theme } = useTheme();
+  const { isDark, darkThemeColors } = useMountedTheme();
 
   const handleToggle = (index) => {
     setOpenIndex(openIndex === index ? -1 : index);
@@ -43,13 +43,13 @@ const FAQ = () => {
   };
 
   return (
-    <section className="py-20 bg-slate-50 dark:bg-gray-900 transition-colors duration-300">
+    <section className="py-20 bg-slate-50 dark:bg-gray-950 transition-colors duration-300">
       <div className="container mx-auto px-4">
         <div className="text-center max-w-3xl mx-auto mb-16">
-          <h2 className="text-3xl font-bold text-slate-900 dark:text-white mb-4">
+          <h2 className={`text-3xl font-bold mb-4 ${isDark ? 'bg-gradient-to-r ' + darkThemeColors.heading + ' text-transparent bg-clip-text' : 'text-slate-900'}`}>
             Frequently Asked Questions
           </h2>
-          <p className="text-lg text-slate-600 dark:text-slate-400">
+          <p className="text-lg text-slate-600 dark:text-cyan-200">
             Everything you need to know about FinVisor
           </p>
         </div>
@@ -61,19 +61,19 @@ const FAQ = () => {
                 role="button"
                 className={`cursor-pointer flex justify-between items-center w-full text-left p-6 ${
                   openIndex === index 
-                    ? "bg-white dark:bg-gray-800 rounded-t-xl" 
-                    : "bg-white dark:bg-gray-800 rounded-xl"
-                } shadow-sm hover:bg-slate-100 dark:hover:bg-gray-700 transition-colors duration-200`}
+                    ? "bg-white dark:bg-gray-900 rounded-t-xl" 
+                    : "bg-white dark:bg-gray-900 rounded-xl"
+                } shadow-sm hover:bg-slate-100 dark:hover:bg-gray-800 transition-colors duration-200 dark:shadow-blue-900/10 dark:border dark:border-gray-800`}
                 onClick={() => handleToggle(index)}
                 onKeyDown={(e) => handleKeyDown(index, e)}
                 aria-expanded={openIndex === index}
                 aria-controls={`faq-answer-${index}`}
                 tabIndex={0}
               >
-                <h3 className="text-lg font-medium text-slate-900 dark:text-white">
+                <h3 className={`text-lg font-medium ${isDark ? 'bg-gradient-to-r ' + darkThemeColors.primary + ' text-transparent bg-clip-text' : 'text-slate-900'}`}>
                   {faq.question}
                 </h3>
-                <div className="cursor-pointer text-blue-500">
+                <div className="cursor-pointer text-blue-500 dark:text-blue-400">
                   {openIndex === index ? (
                     <Minus className="h-5 w-5" />
                   ) : (
@@ -84,9 +84,9 @@ const FAQ = () => {
               {openIndex === index && (
                 <div
                   id={`faq-answer-${index}`}
-                  className="bg-white dark:bg-gray-800 p-6 rounded-b-xl shadow-sm border-t border-slate-100 dark:border-gray-700"
+                  className="bg-white dark:bg-gray-900 p-6 rounded-b-xl shadow-sm border-t border-slate-100 dark:border-gray-800 dark:shadow-blue-900/10"
                 >
-                  <p className="text-slate-600 dark:text-slate-300">{faq.answer}</p>
+                  <p className="text-slate-600 dark:text-indigo-100">{faq.answer}</p>
                 </div>
               )}
             </div>

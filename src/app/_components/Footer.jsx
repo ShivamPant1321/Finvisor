@@ -2,8 +2,12 @@ import React from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { Twitter, Facebook, Instagram, Linkedin } from "lucide-react";
+import { useTheme } from "next-themes";
 
 const Footer = () => {
+  const { resolvedTheme } = useTheme();
+  const logoSrc = resolvedTheme === "dark" ? "/logo-dark.png" : "/logo-light.png";
+
   return (
     <footer className="bg-slate-900 text-slate-300 py-12">
       <div className="container mx-auto px-4">
@@ -11,9 +15,9 @@ const Footer = () => {
           <div>
             <Link href="/">
               <Image
-                src="/FinVisor.png"
+                src={logoSrc}
                 width={140}
-                height={45}
+                height="auto"
                 alt="FinVisor"
                 className="mb-6"
                 priority

@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { useTheme } from "next-themes";
+import { useMountedTheme } from "@/hooks/use-mounted-theme";
 import { cn } from "@/lib/utils";
 
 export const BackgroundGradientAnimation = ({
@@ -20,7 +20,7 @@ export const BackgroundGradientAnimation = ({
   interactive = true,
   containerClassName,
 }) => {
-  const { resolvedTheme } = useTheme();
+  const { isDark } = useMountedTheme();
   const interactiveRef = useRef(null);
   const [curX, setCurX] = useState(0);
   const [curY, setCurY] = useState(0);
@@ -28,26 +28,40 @@ export const BackgroundGradientAnimation = ({
   const [tgY, setTgY] = useState(0);
   const [mounted, setMounted] = useState(false);
   
+  // Enhanced dark theme colors for more vibrant gradients
+  const darkThemeGradientStart = "rgb(10, 0, 30)"; // Darker than before
+  const darkThemeGradientEnd = "rgb(0, 5, 20)"; // Darker than before
+  const darkThemeFirstColor = "120, 60, 255";
+  const darkThemeSecondColor = "240, 120, 255";
+  const darkThemeThirdColor = "60, 180, 255";
+  const darkThemeFourthColor = "230, 90, 140";
+  const darkThemeFifthColor = "220, 220, 100";
+  const darkThemePointerColor = "200, 120, 255";
+  
   useEffect(() => {
     setMounted(true);
     
-    document.body.style.setProperty(
-      "--gradient-background-start",
-      gradientBackgroundStart
-    );
-    document.body.style.setProperty(
-      "--gradient-background-end",
-      gradientBackgroundEnd
-    );
-    document.body.style.setProperty("--first-color", firstColor);
-    document.body.style.setProperty("--second-color", secondColor);
-    document.body.style.setProperty("--third-color", thirdColor);
-    document.body.style.setProperty("--fourth-color", fourthColor);
-    document.body.style.setProperty("--fifth-color", fifthColor);
-    document.body.style.setProperty("--pointer-color", pointerColor);
+    // Use enhanced dark theme colors if in dark mode
+    const bgStart = isDark ? darkThemeGradientStart : gradientBackgroundStart;
+    const bgEnd = isDark ? darkThemeGradientEnd : gradientBackgroundEnd;
+    const first = isDark ? darkThemeFirstColor : firstColor;
+    const second = isDark ? darkThemeSecondColor : secondColor;
+    const third = isDark ? darkThemeThirdColor : thirdColor;
+    const fourth = isDark ? darkThemeFourthColor : fourthColor;
+    const fifth = isDark ? darkThemeFifthColor : fifthColor;
+    const pointer = isDark ? darkThemePointerColor : pointerColor;
+    
+    document.body.style.setProperty("--gradient-background-start", bgStart);
+    document.body.style.setProperty("--gradient-background-end", bgEnd);
+    document.body.style.setProperty("--first-color", first);
+    document.body.style.setProperty("--second-color", second);
+    document.body.style.setProperty("--third-color", third);
+    document.body.style.setProperty("--fourth-color", fourth);
+    document.body.style.setProperty("--fifth-color", fifth);
+    document.body.style.setProperty("--pointer-color", pointer);
     document.body.style.setProperty("--size", size);
     document.body.style.setProperty("--blending-value", blendingValue);
-  }, []);
+  }, [isDark]);
 
   useEffect(() => {
     if (!interactive || !mounted) return;
@@ -92,7 +106,7 @@ export const BackgroundGradientAnimation = ({
     return null;
   }
 
-  const adjustedColor = resolvedTheme === "dark" ? "rgba(0, 0, 0, 0.4)" : "rgba(255, 255, 255, 0.1)";
+  const adjustedColor = isDark ? "rgba(0, 0, 0, 0.75)" : "rgba(255, 255, 255, 0.1)";
 
   return (
     <div

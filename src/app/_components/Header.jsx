@@ -8,11 +8,18 @@ import Link from "next/link";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X } from "lucide-react";
+import { useTheme } from "next-themes";
 
 const Header = () => {
   const { user, isSignedIn } = useUser() || {};
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const { resolvedTheme } = useTheme();
+  const [logoSrc, setLogoSrc] = useState("/logo-light.png");
+
+  useEffect(() => {
+    setLogoSrc(resolvedTheme === "dark" ? "/logo-dark.png" : "/logo-light.png");
+  }, [resolvedTheme]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -35,9 +42,9 @@ const Header = () => {
           <div className="flex items-center">
             <Link href="/">
               <Image
-                src="/FinVisor.png"
+                src={logoSrc}
                 width={140}
-                height={45}
+                height={40}
                 alt="FinVisor"
                 priority
               />

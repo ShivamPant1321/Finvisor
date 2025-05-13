@@ -1,6 +1,7 @@
 "use client";
 import React, { useEffect, useState, useRef } from "react";
 import { cn } from "@/lib/utils";
+import { useTheme } from "next-themes";
 
 export const SparklesCore = ({
   id,
@@ -22,6 +23,13 @@ export const SparklesCore = ({
     width: 0,
     height: 0,
   });
+  const { theme, systemTheme } = useTheme();
+  
+  // Determine the effective theme
+  const currentTheme = theme === 'system' ? systemTheme : theme;
+  
+  // Calculate particle color based on theme if not explicitly provided
+  const effectiveParticleColor = particleColor || (currentTheme === 'dark' ? "180, 180, 255" : "100, 100, 255");
 
   // 1) resize + (re)generate particles
   useEffect(() => {
@@ -73,7 +81,7 @@ export const SparklesCore = ({
           p.y = Math.random() * canvasConfig.height;
           p.life = Math.random() * particleLife;
         }
-        ctx.fillStyle = `rgba(${particleColor}, ${p.opacity * particleOpacity})`;
+        ctx.fillStyle = `rgba(${effectiveParticleColor}, ${p.opacity * particleOpacity})`;
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
         ctx.fill();
@@ -82,7 +90,7 @@ export const SparklesCore = ({
     };
     if (canvasConfig.width && canvasConfig.height) animate();
     return () => cancelAnimationFrame(raf);
-  }, [id, canvasConfig.width, canvasConfig.height, particleColor, particleOpacity, particleLife]);
+  }, [id, canvasConfig.width, canvasConfig.height, effectiveParticleColor, particleOpacity, particleLife, currentTheme]);
 
   return (
     <div className={cn("relative h-full w-full", className)}>
@@ -100,9 +108,8 @@ SparklesCore.defaultProps = {
   id: "sparkles-canvas",
   background: "transparent",
   minSize: 0.5,
-  maxSize: 1.5,
+  maxSize: 2,
   speed: 1,
-  particleColor: "255, 255, 255",
   className: "",
   particleDensity: 1,
   particleOpacity: 1,

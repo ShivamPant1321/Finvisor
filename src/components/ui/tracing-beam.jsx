@@ -1,13 +1,13 @@
 "use client";
 import React, { useEffect, useRef, useState } from "react";
 import { motion, useAnimation, useMotionValue } from "framer-motion";
-import { useTheme } from "next-themes";
+import { useMountedTheme } from "@/hooks/use-mounted-theme";
 
 export const TracingBeam = ({
   children,
   className,
 }) => {
-  const { resolvedTheme } = useTheme();
+  const { isDark } = useMountedTheme();
   const [active, setActive] = useState(false);
   const progressValue = useMotionValue(0);
   const scrollContainer = useRef(null);
@@ -40,7 +40,8 @@ export const TracingBeam = ({
     return () => container.removeEventListener("scroll", handleScroll);
   }, [controls, progressValue]);
 
-  const beamColor = resolvedTheme === "dark" ? "#3B82F6" : "#3B82F6";
+  // Enhanced beam color for dark theme
+  const beamColor = isDark ? "#8B5CF6" : "#3B82F6"; // Purple for dark, blue for light
 
   return (
     <div

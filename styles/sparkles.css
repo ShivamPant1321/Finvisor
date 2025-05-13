@@ -1,0 +1,48 @@
+.sparkles-container {
+  position: relative;
+  display: inline-block;
+}
+
+.sparkle {
+  background-color: var(--sparkle-highlight, rgba(100, 185, 255, 0.8));
+  box-shadow: 0 0 10px var(--sparkle-color, rgba(255, 255, 255, 0.3));
+  position: absolute;
+  border-radius: 50%;
+  animation-name: sparkle-animation;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+
+@keyframes sparkle-animation {
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(0);
+    opacity: 0;
+  }
+}
+
+.animate-sparkle-1 {
+  animation-duration: 2s;
+}
+
+.animate-sparkle-2 {
+  animation-duration: 2.5s;
+  animation-delay: 0.3s;
+}
+
+.animate-sparkle-3 {
+  animation-duration: 1.8s;
+  animation-delay: 0.6s;
+}
+
+.dark-mode .sparkle {
+  background-color: var(--sparkle-highlight);
+  box-shadow: 0 0 15px var(--sparkle-color);
+}
