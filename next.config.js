@@ -1,6 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   webpack: (config) => {
+    // Add polyfills or additional webpack configurations here if needed
     return config;
   },
   experimental: {
