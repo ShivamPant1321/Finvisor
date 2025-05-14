@@ -4,12 +4,19 @@ const nextConfig = {
     return config;
   },
   experimental: {
-    turbo: {
-      weak: true,
-    },
+    // turbopack section removed
   },
   images: {
-    domains: ['randomuser.me', 'images.unsplash.com'],
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'randomuser.me',
+      },
+      {
+        protocol: 'https',
+        hostname: 'images.unsplash.com',
+      },
+    ],
   },
 };
 

@@ -1,14 +1,5 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  webpack: (config) => {
-    // Add polyfills or additional webpack configurations here if needed
-    return config;
-  },
-  experimental: {
-    turbo: {
-      weak: true,
-    },
-  },
   images: {
     remotePatterns: [
       {
@@ -21,6 +12,9 @@ const nextConfig = {
       },
     ],
   },
-}
+  experimental: {
+    // you can leave this empty or add experimental features
+  },
+};
 
-export default nextConfig
+export default nextConfig;
